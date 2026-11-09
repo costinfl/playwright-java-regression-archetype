@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example.testing</groupId>
+    <artifactId>playwright-java-regression-archetype</artifactId>
+    <version>1.0.0</version>
+    <packaging>maven-archetype</packaging>
+
+    <name>Playwright Java Regression Test Archetype</name>
+    <description>Standalone Maven archetype for Playwright Java regression testing.</description>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>3.3.1</version>
+            </extension>
+        </extensions>
+    </build>
+</project>

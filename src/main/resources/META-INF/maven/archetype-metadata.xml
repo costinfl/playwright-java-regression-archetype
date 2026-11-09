@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+        xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.2.0"
+        name="playwright-java-regression">
+    <fileSets>
+        <fileSet filtered="true" packaged="false">
+            <directory></directory>
+            <includes>
+                <include>pom.xml</include>
+                <include>README.md</include>
+                <include>.gitignore</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="true">
+            <directory>src/test/java</directory>
+            <includes>
+                <include>**/*.java</include>
+            </includes>
+        </fileSet>
+        <fileSet filtered="true" packaged="false">
+            <directory>src/test/resources</directory>
+            <includes>
+                <include>**/*.properties</include>
+                <include>**/*.json</include>
+                <include>**/*.csv</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</archetype-descriptor>
