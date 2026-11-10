@@ -23,6 +23,7 @@
                 <include>**/*.properties</include>
                 <include>**/*.json</include>
                 <include>**/*.csv</include>
+                <include>**/*.md</include>
             </includes>
         </fileSet>
     </fileSets>

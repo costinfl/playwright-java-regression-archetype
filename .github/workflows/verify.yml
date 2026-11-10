@@ -1,0 +1,49 @@
+name: Verify Maven archetype
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Build and install archetype
+        run: mvn --batch-mode --no-transfer-progress clean install
+
+      - name: Generate sample project
+        working-directory: target
+        run: |
+          mkdir -p archetype-smoke
+          cd archetype-smoke
+          mvn --batch-mode --no-transfer-progress archetype:generate \
+            -DarchetypeCatalog=local \
+            -DarchetypeGroupId=com.example.testing \
+            -DarchetypeArtifactId=playwright-java-regression-archetype \
+            -DarchetypeVersion=1.0.0 \
+            -DgroupId=com.example.smoke \
+            -DartifactId=playwright-archetype-smoke \
+            -Dversion=1.0-SNAPSHOT \
+            -Dpackage=com.example.smoke \
+            -DinteractiveMode=false
+
+      - name: Compile generated test project
+        run: >
+          mvn --batch-mode --no-transfer-progress
+          -f target/archetype-smoke/playwright-archetype-smoke/pom.xml
+          test-compile

@@ -13,7 +13,7 @@ application WAR.
 - Browser lifecycle shared per test class, with an isolated `BrowserContext` per test
 - Page Object and business-scenario examples
 - Environment-specific `.properties` files
-- Screenshot and Playwright trace artifacts
+- Failure screenshots and Playwright trace artifacts
 - Maven Surefire test execution
 
 ## 1. Build and install the archetype
@@ -148,6 +148,13 @@ underlying JSP, Thymeleaf, HTMX, or Vaadin implementation.
 Put JUnit test classes in `tests/`. A test should arrange data, invoke a scenario, and assert the
 observable result. Use dedicated test accounts and deterministic test data.
 
+The sample login tests assume the application exposes a `/login` page with accessible labels
+`Username` and `Password`, a `Sign in` button, and a post-login `/dashboard` page with a
+`Dashboard` heading. Adapt the Page Object and assertions to your application's actual UI.
+
+The login-page test requires the target application to be running and reachable. The authenticated
+login test is skipped when `E2E_USERNAME` or `E2E_PASSWORD` is not configured.
+
 ### Test data and credentials
 
 Put non-sensitive, stable fixtures in `testdata/`. Do not commit passwords, tokens, production
@@ -162,10 +169,12 @@ mvn test -Denv=qa
 
 ## 6. Run and debug tests
 
+The target application must be running and reachable at the configured `baseUrl`.
+
 Run all tests headlessly:
 
 ```bash
-mvn clean test
+mvn clean test -Dheadless=true
 ```
 
 Run with a visible browser:
@@ -230,7 +239,13 @@ The suite should validate externally observable behavior through the browser. It
 depend on application implementation classes or direct database access unless a separately
 managed test-fixture mechanism explicitly requires it.
 
-## 9. Important operational notes
+## 9. Automated verification
+
+The GitHub Actions workflow in `.github/workflows/verify.yml` builds and installs this archetype,
+generates a sample project, and compiles its test sources. This validates archetype generation and
+Java compilation without requiring a running application or test credentials.
+
+## 10. Important operational notes
 
 - The test runner's Java version is independent of the target application's Java version.
   A Java 17 test runner can test a Java 11 application over HTTP.

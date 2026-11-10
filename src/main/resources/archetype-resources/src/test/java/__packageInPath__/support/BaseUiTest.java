@@ -3,6 +3,8 @@ package ${package}.support;
 import ${package}.config.EnvironmentConfig;
 import com.microsoft.playwright.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +16,12 @@ public abstract class BaseUiTest {
     protected Browser browser;
     protected BrowserContext context;
     protected Page page;
+
+    @RegisterExtension
+    protected final TestExecutionExceptionHandler screenshotOnFailure = (extensionContext, failure) -> {
+        captureFailureScreenshot(extensionContext.getDisplayName());
+        throw failure;
+    };
 
     @BeforeAll
     void startBrowser() {
@@ -83,7 +91,7 @@ public abstract class BaseUiTest {
         return EnvironmentConfig.baseUrl() + normalizedPath;
     }
 
-    protected void captureFailureScreenshot(TestInfo testInfo) {
+    private void captureFailureScreenshot(String testName) {
         if (page == null) {
             return;
         }
@@ -91,7 +99,7 @@ public abstract class BaseUiTest {
         try {
             Path directory = Path.of("target", "screenshots");
             Files.createDirectories(directory);
-            String safeName = testInfo.getDisplayName().replaceAll("[^a-zA-Z0-9-_]", "_");
+            String safeName = testName.replaceAll("[^a-zA-Z0-9-_]", "_");
             page.screenshot(new Page.ScreenshotOptions()
                     .setPath(directory.resolve(safeName + ".png"))
                     .setFullPage(true));
